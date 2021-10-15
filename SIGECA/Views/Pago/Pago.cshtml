@@ -1,0 +1,165 @@
+﻿
+@using SIGECA.Entities;
+@model IEnumerable<Venta>
+@{
+    ViewData["Title"] = "Gestionar Pago";
+}
+<h1 class="mt-4" style="color: white">Gestion de Pagos</h1>
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-9 col-sm-9 col-lg-9 col-xl-9">
+                <div class=" col-4 col-sm-4 col-lg-4 col-xl-4">
+                    <i class="fas fa-table mr-1"></i>
+                    Lista General de Ventas
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <table>
+            <tr>
+                <td width="700px">
+                </td>
+                <td>
+                    <label>Buscar Venta:  </label>
+                </td>
+                <td>
+                    <input id="searchTerm" type="text" onkeyup="doSearch()" />
+                </td>
+                <td>
+                    <button id="btnLimpiar" class="btn btn-outline-success">Limpiar</button>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <table id="tablaVentaPorCódigo" class="table datatable-ventas">
+        <thead class="thead-light">
+            <tr>
+                <th>Código</th>
+                <th>Total</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            <tr class='noSearch hide'>
+                <td colspan="5"></td>
+            </tr>
+        </thead>
+    </table>
+
+</div>
+
+
+<input type="hidden" id="URL_ObtenerVentaPorCodigoVenta" value="@Url.Action("ObtenerVentaPorCodigoVenta", "Pago")" />
+<input type="hidden" id="URL_VentaListar" value="@Url.Action("obtenerAllVentas", "Pago")" />
+<input type="hidden" id="URL_CambiarEstadoVenta" value="@Url.Action("CambiarEstadoVenta", "Pago")" />
+
+@section scripts{
+
+    <script src="~/js/Pago/Pago.js"></script>
+
+    <script src="~/js/Validaciones.js"></script>
+}
+
+
+
+
+@* Modal para realizar el pago de la venta *@
+<div class="modal" id="modalPagoVenta" tabindex="-1" aria-labelledby="registrarPagoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarProveedorLabel">Detalle de Venta</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="imp1">
+                <form>
+                    <div class="row" style="padding: 5px 5%">
+
+                        <input type="hidden" id="idCodigoVenta" name="id" />
+                        <div id="codVent" class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="codigo" class="form-label">Código de Venta:</label>
+                            <input class="form-control" id="txtCodVenta" name="CodVenta" readonly>
+                        </div>
+                        <div id="fecha" class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="fecha" class="form-label">Fecha:</label>
+                            <input class="form-control" id="txtFecha" name="fecha" readonly>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div id="productos" class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="productos" class="form-label">Productos:</label>
+                            <textarea class="form-control" id="txaProductos" name="items" rows="5" readonly>
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div id="total" class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="total" class="form-label">Total:</label>
+                            <input class="form-control" id="txtTotal" name="total" readonly>
+                        </div>
+
+
+                        <div id="efectivo" class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="Efectivo" class="form-label">Efectivo:</label>
+                            <input type="text" pattern="[0-9]+" class="form-control" id="txtEfectivo"
+                                   placeholder="0" name="efect" onkeypress="return valideKey(event);">
+                        </div>
+
+                        <div id="vuelto" class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <h5><label for="Vuelto" class="form-label">Vuelto: </label></h5>
+                            <input class="form-control" id="txtVuelto" readonly>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnPrint" type="button" class="btn btn-primary" onclick="imprim1(imp1)">Imprimir</button>
+                <button id="btnPagar" type="button" style="background-color:Green; color:white" class="btn btn-pagar">Cobrar</button>
+                <button id="btnAnular" type="button" style="background-color: red; color: white" class="btn btn-anular">Anular</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    #datos {
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 1em;
+    }
+
+        #datos tr:nth-child(even) {
+            background: #ccc;
+        }
+
+        #datos td {
+            padding: 5px;
+        }
+
+        #datos tr.noSearch {
+            background: White;
+            font-size: 0.8em;
+        }
+
+            #datos tr.noSearch td {
+                padding-top: 10px;
+                text-align: right;
+            }
+
+    .hide {
+        display: none;
+    }
+
+    .red {
+        color: Red;
+    }
+</style>

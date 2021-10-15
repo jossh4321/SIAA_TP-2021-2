@@ -1,0 +1,385 @@
+﻿@using SIGECA.Entities;
+@using SIGECA.DTOs;
+@model IEnumerable<Usuario>
+@{
+    ViewData["Title"] = "Gestionar Usuarios";
+    List<RolDTO> roles = (List<RolDTO>)ViewBag.rolesDTO;
+
+}
+<h1 class="mt-4" style="color:white">Gestion de Usuarios</h1>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="row">
+            <div class=" col-9 col-sm-9 col-lg-9 col-xl-9">
+                <i class="fas fa-table mr-1"></i>
+                Usuarios Registrados actualmente
+            </div>
+            <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                <button type="button" class="btn btn-outline-success btn-block"
+                        id="btnRegistrarUsuario">
+                    <i class="fas fa-user-check"></i>
+                    <span>Registrar Usuario</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="TableUsuario" class="table datatable-usuario">
+            <thead class="thead-light">
+                <tr>
+                    <th>Usuario</th>
+                    <th>Nombre Completo</th>
+                    <th>Tipo de Usuario</th>
+                    <th>Num. Documento</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div class="modal" id="modalRegistrarUsuario" tabindex="-1" aria-labelledby="registrarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrarUsuarioLabel">Registrar Nuevo Usuario</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("RegistrarUsuario","Usuario")" id="frmRegistrarUsuario" method="post">
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="nombre" class="form-label">Nombres:</label>
+                            <input class="form-control" id="nombreUsuarioRegistrar" name="datos.nombre" placeholder="Jose Alberto">
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="apellido" class="form-label">Apellidos:</label>
+                            <input class="form-control" id="apellidoUsuarioRegistrar" name="datos.apellido" placeholder="Ramirez Perez">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="email" class="form-label">E-Mail: </label>
+                            <input type="email" class="form-control" id="emailUsuarioRegistrar"
+                                   name="datos.email"
+                                   placeholder="ejemplo@dominio.com">
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="telefono" class="form-label">Nro Telefono:</label>
+                            <input class="form-control" id="telefonoUsuarioRegistrar"
+                                   name="datos.telefono"
+                                   placeholder="998877665">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <textarea class="form-control" id="direccionUsuarioRegistrar"
+                                      name="datos.direccion"
+                                      rows="3" placeholder="Av. cerca 123 - Distrito"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="tipoDocumento" class="form-label">Tipo Documento: </label>
+                            <select class="form-select form-control" id="tipoDocumentoUsuarioRegistrar"
+                                    name="datos.tipoDocumento"
+                                    aria-label="Default select example">
+                                <option selected value="DNI">D.N.I.</option>
+                                <option value="CI">Carnet De Extranjeria</option>
+                                <option value="Pasaporte">Pasaporte</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="numeroDocumento" class="form-label">Numero Documento:</label>
+                            <input class="form-control" id="telefonoUsuarioRegistrar"
+                                   name="datos.numeroDocumento" placeholder="12345678">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="tipoUsuario" class="form-label">Tipo Usuario: </label>
+                            <select class="form-select form-control" id="tipoUsuarioUsuarioRegistrar"
+                                    name="tipoUsuario"
+                                    aria-label="Default select example">
+                                <option selected value="Administrador">Administrador</option>
+                                <option value="Vendedor">Vendedor</option>
+                                <option value="Cajero">Cajero</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="fechaNacimiento" class="form-label">Fecha Nacimiento:</label>
+                            <input class="form-control" id="fechaNacimientoUsuarioRegistrar"
+                                   name="datos.fechaNacimiento" placeholder="yyyy-mm-dd">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="rol" class="form-label">Rol de Usuario:</label>
+                            <select class="form-select form-control" id="rolRegistrarUsuario"
+                                    name="rol"
+                                    aria-label="Default select example">
+                                @for (int i = 0; i < roles.Count; i++)
+                                {
+                                    <option value="@roles[i].id">@roles[i].nombre</option>
+                                }
+
+                            </select>
+                        </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row" style="padding: 5px 5%;width:100%">
+                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-block btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-block btn-primary"
+                                id="btnRegistrarUsuarioModal">
+                            Registrar Usuario
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalModificarUsuario" tabindex="-1" aria-labelledby="modificarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarUsuarioLabel">Modificar Usuario</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("ActualizarUsuario","Usuario")" id="frmModificarUsuario" method="post">
+                    <div class="row" style="padding: 5px 5%">
+                        <input type="hidden" id="idUsuarioModificar" name="id" />
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="nombre" class="form-label">Nombres:</label>
+                            <input class="form-control" id="nombreUsuarioModificar" name="datos.nombre" placeholder="Jose Alberto">
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="apellido" class="form-label">Apellidos:</label>
+                            <input class="form-control" id="apellidoUsuarioModificar" name="datos.apellido" placeholder="Ramirez Perez">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="email" class="form-label">E-Mail: </label>
+                            <input type="email" class="form-control" id="emailUsuarioModificar"
+                                   name="datos.email"
+                                   placeholder="ejemplo@dominio.com">
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="telefono" class="form-label">Nro Telefono:</label>
+                            <input class="form-control" id="telefonoUsuarioModificar"
+                                   name="datos.telefono"
+                                   placeholder="998877665">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <textarea class="form-control" id="direccionUsuarioModificar"
+                                      name="datos.direccion"
+                                      rows="3" placeholder="Av. cerca 123 - Distrito"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="tipoDocumento" class="form-label">Tipo Documento: </label>
+                            <select class="form-select form-control" id="tipoDocumentoUsuarioModificar"
+                                    name="datos.tipoDocumento"
+                                    aria-label="Default select example">
+                                <option selected value="DNI">D.N.I.</option>
+                                <option value="CI">Carnet De Extranjeria</option>
+                                <option value="Pasaporte">Pasaporte</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="numeroDocumento" class="form-label">Numero Documento:</label>
+                            <input class="form-control" id="numeroDocumentoUsuarioModificar"
+                                   name="datos.numeroDocumento" placeholder="12345678">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="tipoUsuario" class="form-label">Tipo Usuario: </label>
+                            <select class="form-select form-control" id="tipoUsuarioUsuarioModificar"
+                                    name="tipoUsuario"
+                                    aria-label="Default select example">
+                                <option selected value="Administrador">Administrador</option>
+                                <option value="Vendedor">Vendedor</option>
+                                <option value="Cajero">Cajero</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="fechaNacimiento" class="form-label">Fecha Nacimiento:</label>
+                            <input class="form-control" id="fechaNacimientoUsuarioModificar"
+                                   name="datos.fechaNacimiento" placeholder="yyyy-mm-dd">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="rol" class="form-label">Rol de Usuario:</label>
+                            <select class="form-select form-control" id="rolModificarUsuario"
+                                    name="rol"
+                                    aria-label="Default select example">
+                                @for (int i = 0; i < roles.Count; i++)
+                                {
+                                    <option value="@roles[i].id">@roles[i].nombre</option>
+                                }
+
+                            </select>
+                        </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row" style="padding: 5px 5%;width:100%">
+                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-block btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-block btn-primary"
+                                id="btnModificarUsuarioModal">
+                            Modificar Usuario
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalConsultarUsuario" tabindex="-1" aria-labelledby="consultarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarUsuarioLabel">Detalle de Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row" style="padding: 5px 5%">
+                        <input type="hidden" id="idUsuarioVisualizar" name="id" />
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="nombre" class="form-label">Nombres:</label>
+                            <input class="form-control" id="nombreUsuarioVisualizar"
+                                   name="datos.nombre" placeholder="Jose Alberto"
+                                   disabled>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="apellido" class="form-label">Apellidos:</label>
+                            <input class="form-control" id="apellidoUsuarioVisualizar"
+                                   name="datos.apellido" placeholder="Ramirez Perez"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="email" class="form-label">E-Mail: </label>
+                            <input type="email" class="form-control" id="emailUsuarioVisualizar"
+                                   name="datos.email"
+                                   placeholder="ejemplo@dominio.com"
+                                   disabled>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="telefono" class="form-label">Nro Telefono:</label>
+                            <input class="form-control" id="telefonoUsuarioVisualizar"
+                                   name="datos.telefono"
+                                   placeholder="998877665"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <textarea class="form-control" id="direccionUsuarioVisualizar"
+                                      name="datos.direccion"
+                                      rows="3" placeholder="Av. cerca 123 - Distrito"
+                                      disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="tipoDocumento" class="form-label">Tipo Documento: </label>
+                            <select class="form-select form-control" id="tipoDocumentoUsuarioVisualizar"
+                                    name="datos.tipoDocumento"
+                                    aria-label="Default select example"
+                                    disabled>
+                                <option selected value="DNI">D.N.I.</option>
+                                <option value="CI">Carnet De Extranjeria</option>
+                                <option value="Pasaporte">Pasaporte</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="numeroDocumento" class="form-label">Numero Documento:</label>
+                            <input class="form-control" id="numeroDocumentoUsuarioVisualizar"
+                                   name="datos.numeroDocumento" placeholder="12345678"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="tipoUsuario" class="form-label">Tipo Usuario: </label>
+                            <select class="form-select form-control" id="tipoUsuarioUsuarioVisualizar"
+                                    name="tipoUsuario"
+                                    aria-label="Default select example"
+                                    disabled>
+                                <option selected value="Administrador">Administrador</option>
+                                <option value="Vendedor">Vendedor</option>
+                                <option value="Cajero">Cajero</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="fechaNacimiento" class="form-label">Fecha Nacimiento:</label>
+                            <input class="form-control" id="fechaNacimientoUsuarioVisualizar"
+                                   name="datos.fechaNacimiento"
+                                   disabled
+                                   placeholder="yyyy-mm-dd">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="rol" class="form-label">Rol de Usuario:</label>
+                            <select class="form-select form-control" id="rolVisualizarUsuario"
+                                    name="rol"
+                                    aria-label="Default select example"
+                                    disabled>
+                                @for (int i = 0; i < roles.Count; i++)
+                                {
+                                    <option value="@roles[i].id">@roles[i].nombre</option>
+                                }
+
+                            </select>
+                        </div></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="URL_ObtenerUsuarioPorID" value="@Url.Action("ObtenerUsuarioID", "Usuario")" />
+<input type="hidden" id="URL_UsuariosListar" value="@Url.Action("GetAll", "Usuario")" />
+<input type="hidden" id="URL_UsuarioActualizarEstado" value="@Url.Action("CambiarEstadoUsuario", "Usuario")" />
+<input type="hidden" id="URL_UsuariosListarTodos" value="@Url.Action("ObtenerUsuarios", "Usuario")" />
+<input type="hidden" id="URL_UsuarioRolPermisoPorID" value="@Url.Action("getUsuariosRolPermiso", "Usuario")" />
+
+
+@section scripts{
+    <script type="text/javascript" src="~/js/Usuarios/GestionarUsuario.js">
+    </script>
+}

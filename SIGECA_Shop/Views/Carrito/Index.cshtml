@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Carro Compras";
+    ViewBag.Inicio = true;
+    ViewBag.HomeActivate = "active";
+}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/css/Catalogo/style.default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+<div class="page-holder" style="min-height:85vh; width:100%;">
+    <section class="py-5" style="padding-left:5%; padding-right:5%;">
+        <h2 class="h5 text-uppercase mb-4">Compra de Carrito</h2>
+        <div class="row">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <!-- CART TABLE-->
+                <div class="table-responsive mb-4">
+                    <table id="carritoTable" class="table">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Producto</strong></th>
+                                <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Precio</strong></th>
+                                <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Cantidad</strong></th>
+                                <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Total</strong></th>
+                                <th class="border-0" scope="col"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- CART NAV-->
+                <div class="bg-light px-4 py-3">
+                    <div class="row align-items-center text-center">
+                        <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="Catalogo"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continuar Comprando</a></div>
+                        <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" onclick="procesarPago()" href="javascript:void(0);">Procesar al pago<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
+                    </div>
+                </div>
+            </div>
+            <!-- ORDER TOTAL-->
+            <div class="col-lg-4">
+                <div class="card border-0 rounded-0 p-lg-4 bg-light">
+                    <div class="card-body">
+                        <h5 class="text-uppercase mb-4">Total de Compra</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span id="carrSubtotal" class="text-muted small">S/. 0.00</span></li>
+                            <li class="border-bottom my-2"></li>
+                            <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="carrTotal">S/. 0.00</span></li>
+                            @*<li>
+                                    <form action="#">
+                                        <div class="form-group mb-0">
+                                            <input class="form-control" type="text" placeholder="Enter your coupon">
+                                            <button class="btn btn-dark btn-sm btn-block" type="submit"> <i class="fas fa-gift mr-2"></i>Apply coupon</button>
+                                        </div>
+                                    </form>
+                                </li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal" id="modalRegistrarVenta" tabindex="-1" aria-labelledby="registrarVentaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registrarUsuarioLabel">Registrar Nueva Compra</h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="$('#modalRegistrarVenta').modal('hide')" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" id="clienteDatos" style="padding: 5px 5%; margin-top: 10px;">
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3" style=" margin-bottom: 15px;">
+                            <label class="form-label">Tipo de Compra: </label>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3" style=" margin-bottom: 15px;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="presencialRadio" value="presencial" name="customRadioInline1" class="custom-control-input">
+                                <label class="custom-control-label" for="presencialRadio">Presencial</label>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3" style=" margin-bottom: 15px;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="onlineRadio" value="online" name="customRadioInline1" class="custom-control-input">
+                                <label class="custom-control-label" for="onlineRadio">Online</label>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="nombreCliente" class="form-label">Nombres: </label>
+                            <input class="form-control" type="text" id="nombreCliente" name="nombreCliente" />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="apellidoCliente" class="form-label">Apellidos: </label>
+                            <input class="form-control" type="text" id="apellidoCliente" name="apellidoCliente" />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="correoCliente" class="form-label">Correo: </label>
+                            <input class="form-control" type="text" id="correoCliente" name="correoCliente" />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="telefonoCliente" class="form-label">Telefono: </label>
+                            <input class="form-control" type="text" id="telefonoCliente" name="telefonoCliente" />
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="direccionCliente" class="form-label" style=" margin-top: 9px;">Direccion:</label>
+                            <textarea class="form-control" id="direccionCliente"
+                                      name="direccionCliente"
+                                      rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div id="pay_pal_opcion" style="padding: 5px 5%; margin-top: 10px; display: none;">
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row" style="padding: 5px 5%;width:100%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <button type="button" onclick="$('#modalRegistrarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <button type="button" class="btn btn-block btn-primary" onclick="registrarVentaTemp()" id="btnRegistrarVentaModal">
+                                Realizar Venta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/Carrito/Carrito.js"></script>
+    <script src="~/js/Catalogo/vendor/jquery.min.js"></script>
+    <script src="~/js/Catalogo/vendor/boostrap.bundle.min.js"></script>
+    <script src="~/js/Catalogo/vendor/lightbox.min.js"></script>
+    <script src="~/js/Catalogo/vendor/nouislider.min.js"></script>
+    <script src="~/js/Catalogo/vendor/boostrap-select.min.js"></script>
+    <script src="~/js/Catalogo/vendor/owl.carousel.min.js"></script>
+    <script src="~/js/Catalogo/vendor/owl.carousel2.thumbs.min.js"></script>
+    <script src="~/js/Catalogo/front.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script src="https://www.paypal.com/sdk/js?client-id=AYt82QLeNqYyNldYo8NQa4hDoYC7VRWChE2u1hDvWhUK5WOIbvqOIF-bbe8O7elLSlliwevU2LD4YUT-"></script>
+    <script>
+        paypal.Buttons({
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: parseFloat(Number($('#carrTotal').html().replace("S/. ", "")) * 0.25).toFixed(2)
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    registrarVenta();
+                });
+            },
+            onError: (err) => {
+                console.error('Ocurrio un error', err);
+            }
+        }).render('#paypal-button-container');
+    </script>
+</div>

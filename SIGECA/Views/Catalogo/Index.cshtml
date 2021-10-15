@@ -1,0 +1,436 @@
+﻿@model SIGECA.Controllers.CatalogoController.ModelOferta
+@{
+    ViewData["Title"] = "Gestionar Catalogo";
+}
+
+<h2 class="mt-3" style="color:white">Gestion de Catalogo</h2>
+<div class="row">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" style="color:midnightblue">Catalogo </li>
+            </ol>
+
+        </nav>
+    </div>
+</div>
+<p style="color:gray;">Hay @Model.productos.Count() productos en catálogo</p>
+<table id="tableCatalogo" class="table datatable-catalogo" style="background-color: white">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Nombre del Producto</th>
+            <th scope="col">Tipo de Venta</th>
+            <th scope="col">Precio (x Kg)</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+</table>
+
+
+@*Actualizar Precio*@
+<div class="modal" id="actualizarPrecioProductoModal" tabindex="-1" aria-labelledby="actualizarPrecioProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actualizarPrecioProductoLabel">Actualizacion de precio del producto</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+
+                        <form id="formActualizarPrecioProducto">
+                            <div class="row" style="padding: 5px 5%">
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="nombre" class="form-label">Producto:</label>
+                                    <input class="form-control" id="productoIDActualizarPrecio" name="id" placeholder="Pechuga" hidden>
+                                    <input class="form-control" id="productoNombreActualizarPrecio" name="productoNombre" aria-label="Default select example" disabled />
+                                </div>
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="precioOfer" class="form-label">Stock del producto:</label>
+                                    <input class="form-control" id="StockProductoActualizarPrecio" name="stock" placeholder="Ej 20" disabled>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 5px 5%">
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="categoria" class="form-label">Categoria: </label>
+                                    <input class="form-control" id="categoriaProductoActualizarPrecio" disabled>
+                                </div>
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="unidadMedida" class="form-label">Unidad de Medida:</label>
+                                    <input class="form-control" id="unidadMedidaActualizarPrecio" name="unidadMedida" disabled>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 5px 5%">
+                                <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                                    <label for="precio" class="form-label">Descripcion:</label>
+                                    <input class="form-control" name="descripcion" id="descripcionProductoActualizarPrecio" disabled>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 5px 5%">
+                                <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                                    <label for="precio" class="form-label">Precio:</label>
+                                    <input class="form-control" id="precioProductoActualizarPrecio" name="precio" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnActualizarPrecioProducto">Actualizar Precio del Producto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*REGISTRAR OFERTA*@
+<div class="modal" id="registrarProductoOferta" tabindex="-1" aria-labelledby="registrarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrarProductoLabel">Registro del producto</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <input class="form-control" type="hidden" name="productoID" value="">
+                        <div class="row" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="nombre" class="form-label">Producto:</label>
+                                <input class="form-control" id="productoIDRegistrar" name="productoID" placeholder="Pechuga">
+
+                                <select class="form-select form-control" id="productoRegistrarOferta" onchange="registrarOferta1();" name="productoNombre" aria-label="Default select example" disabled>
+                                    @foreach (var prod in Model.productos)
+                                    {
+                                        <option selected value="@prod.id">@prod.nombre</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="precioOfer" class="form-label">Stock de oferta:</label>
+                                <input class="form-control" id="precioOfertaRegistrar" name="stockOferta" placeholder="Ej 20">
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="categoria" class="form-label">Categoria: </label>
+                                <input class="form-control" id="categoriaProducto" disabled>
+                            </div>
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="precio" class="form-label">Precio:</label>
+                                <input class="form-control" id="precioProducto" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card">
+                    <div class="card-body">
+                        @*ddl descuento*@
+                        <div class="row" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="dscto" class="form-label">Tipo descuento</label>
+                                <select class="form-select form-control" id="ddl_Descuento" name="tipoDescuento" aria-label="Default select example">
+                                    <option selected value="ninguno">Ninguno</option>
+                                    <option value="porcentaje">Porcentaje</option>
+                                    <option value="multiplicidad">Multiplicidad</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="nombre" class="form-label">Tienda:</label>
+                                <select class="form-select form-control" id="productoRegistrarOfertaTienda" onchange="registrarOferta2();" name="tiendaID" aria-label="Default select example">
+                                    @foreach (var prod in Model.tiendas)
+                                    {
+                                        <option selected value="@prod.id">@prod.nombre</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        @*dcto porcentaje*@
+                        <div class="row" id="div_Porcentaje" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="porcentaje" class="form-label">Descuento: </label>
+                                <input class="form-control" id="id_InputPorcentajeRegistrar" name="porcentajeDescuento" placeholder="Ej. 10%">
+                            </div>
+
+                        </div>
+
+                        @*dcto Multiplicidad*@
+                        <div class="row" id="div_Multiplicidad" style="padding: 5px 5%">
+                            <div class="col-5 col-sm-5 col-lg-5 col-xl-5">
+                                <label for="multiplicidad" class="form-label">Cantidad ofrecida: </label>
+                                <input class="form-control" id="id_InputMultiplicidadRegistrar" placeholder="Ej. 3">
+                            </div>
+                            <div class="col-md-auto col align-self-end">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="col-5 col-sm-5 col-lg-5 col-xl-5">
+                                <label for="cantidadPago" class="form-label">Cantidad a pagar:</label>
+                                <input class="form-control" id="id_InputCantidadPagoRegistrar" placeholder="Ej. 2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                @*fecha duracion oferta*@
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" style="padding: 5px 5%">
+                            @*fecha inicioregistrar*@
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label class="mt-3">Fecha Inicio:</label>
+                                <div class="input-group date">
+                                    <input class="form-control" id="fechaIniRegistrar" name="fechaInicio" placeholder="dd/mm/aaaa">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text h-100"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*fecha vencimiento registrar*@
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label class="mt-3">Fecha Vencimiento:</label>
+                                <div class="input-group date">
+                                    <input class="form-control" id="fechaVenciRegistrar" name="fechaVencimiento" placeholder="dd/mm/yyyy">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text h-100"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnRegistrarOferta">Registrar Oferta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*CONSULTAR OFERTA*@
+<div class="modal" id="modalConsultarOferta" tabindex="-1" aria-labelledby="consultarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarUsuarioLabel">Detalle del producto</h5>
+                <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                @*SEC 1 DETALLE PRODUCTO*@
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="nombre" class="form-label">Producto:</label>
+                                <input class="form-control" id="nombreProductoConsultar" disabled />
+                            </div>
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="precio" class="form-label">Precio:</label>
+                                <input class="form-control" id="precioNormalConsultar" disabled />
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="categoria" class="form-label">Descripcion:</label>
+                                <input class="form-control" id="DescripcionConsultar" disabled />
+                            </div>
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="direccion" class="form-label">Stock:</label>
+                                <input class="form-control" id="stockConsultar" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <BR />
+                @*SEC 2 LISTA DE TIENDAS*@
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                @foreach (var tien in Model.tiendas)
+                                {
+                                    <a class="nav-link active" id="home-tab" href="#home" data-toggle="tab" role="tab" aria-controls="home" aria-selected="true"><b>@tien.nombre</b></a>
+                                }
+                            </li>
+                        </ul>
+                        <BR />
+                        <table id="tableTiendaDetalleProducto" class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Stock oferta</th>
+                                    <th scope="col">Descuento</th>
+                                    <th scope="col">Fecha Inicio</th>
+                                    <th scope="col">Fecha Vencimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @*END SEC 2*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*MODIFICAR OFERTA*@
+<div class="modal" id="modalModificarOferta" tabindex="-1" aria-labelledby="modificarOfertaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrarProductoLabel">Modificar Oferta</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row" style="padding: 5px 5%">
+                                <input type="hidden" id="idOfertaModificar" name="id" />
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="nombre" class="form-label">Producto:</label>
+                                    <select class="form-select form-control" id="productoModOferta1" onchange="registrarOferta3();" name="ofer" aria-label="Default select example" disabled>
+                                        @foreach (var prod in Model.productos)
+                                        {
+                                            <option selected value="@prod.id">@prod.nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="precioOfer" class="form-label">Stock de oferta:</label>
+                                    <input class="form-control" placeholder="Ej 10" id="stockOfertaModificar" />
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 5px 5%">
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="categoria" class="form-label">Categoria: </label>
+                                    <input class="form-control" id="categoriaProductoModOferta" disabled />
+                                </div>
+                                <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                    <label for="precio" class="form-label">Precio:</label>
+                                    <input class="form-control" id="precioProductoModOferta" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr />
+                <div class="card">
+                    <div class="card-body">
+                        @*ddl descuento*@
+                        <div class="row" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="dscto" class="form-label">Tipo descuento</label>
+                                <select class="form-select form-control" id="ddl_Descuento2" name="pickOferta" aria-label="Default select example">
+                                    <option value="ninguno">Ninguno</option>
+                                    <option value="porcentaje">Porcentaje</option>
+                                    <option value="multiplicidad">Multiplicidad</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="nombre" class="form-label">Tienda:</label>
+                                <select class="form-select form-control" id="TiendaModOferta" onchange="registrarOferta2();" name="ofer" aria-label="Default select example" disabled>
+                                    @foreach (var prod in Model.tiendas)
+                                    {
+                                        <option selected value="@prod.id">@prod.nombre</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        @*dcto porcentaje*@
+                        <div class="row" id="div_Porcentaje2" style="padding: 5px 5%">
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label for="porcentaje" class="form-label">Descuento: </label>
+                                <input class="form-control" id="id_InputPorcentajeMod" placeholder="Ej. 10%">
+                            </div>
+                        </div>
+
+                        @*dcto Multiplicidad*@
+                        <div class="row" id="div_Multiplicidad2" style="padding: 5px 5%">
+                            <div class="col-5 col-sm-5 col-lg-5 col-xl-5">
+                                <label for="multiplicidad" class="form-label">Cantidad ofrecida: </label>
+                                <input class="form-control" id="id_InputMultiplicidadMod" placeholder="Ej. 3">
+                            </div>
+                            <div class="col-md-auto col align-self-end">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="col-5 col-sm-5 col-lg-5 col-xl-5">
+                                <label for="cantidadPago" class="form-label">Cantidad a pagar:</label>
+                                <input class="form-control" id="id_InputCantidadPagoMod" placeholder="Ej. 2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card">
+                    <div class="card-body">
+                        @*fecha duracion oferta*@
+                        <div class="row" style="padding: 5px 5%">
+                            @*fecha inicioregistrar*@
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label class="mt-3">Fecha Inicio:</label>
+                                <div class="input-group date">
+                                    <input class="form-control" id="fechaIniModificar" name="fechaInicio" placeholder="dd/mm/aaaa">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text h-100"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*fecha vencimiento registrar*@
+                            <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                                <label class="mt-3">Fecha Vencimiento:</label>
+                                <div class="input-group date">
+                                    <input class="form-control" id="fechaVenciModificar" name="fechaVencimiento" placeholder="dd/mm/yyyy">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text h-100"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id="btnModOferta" class="btn btn-primary">Modificar Oferta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="URL_OfertasListarTodos" value="@Url.Action("ObtenerOfertas", "Catalogo")" />
+<input type="hidden" id="URL_ObtenerProductoPorID" value="@Url.Action("ObtenerProductoPorId", "Producto")" />
+<input type="hidden" id="URL_ObtenerOfertaPorID" value="@Url.Action("ObtenerOfertaPorId", "Catalogo")" />
+<input type="hidden" id="URL_ActualizarPrecioProducto" value="@Url.Action("ModificarPrecioProducto", "Producto")" />
+
+
+@section scripts{
+    <script src="~/js/Catalogo/Application.js"></script>
+    <script src="~/js/Catalogo/catalogo.js"></script>
+    @* <script type="text/javascript" src="@Url.Content("~/js/Loaders/dropzone.min.js")"></script>*@
+}
+
