@@ -40,10 +40,11 @@
                 { "render": function (data, type, full, meta) { return full.stock } },
                 {
                     "render": function (data, type, full, meta) {
-                        return '<button class="btn btnConsultarOfertas" data-producto-id="' + full.id + '"><img class="fas fa-eye" /></button>' +
+                        return '<button class="btn btnModificarPrecio" style="color: #4AB6B6" data-producto-id="' + full.id + '"><img class="fas fa-money-check-alt" /></button>';
+                        /*'<button class="btn btnConsultarOfertas" data-producto-id="' + full.id + '"><img class="fas fa-eye" /></button>' +
                             '<button class="btn btnModificarOferta" data-producto-id="' + full.id + '"><img class="fas fa-edit" /></button>' +
-                            '<button class="btn btnAgregarCompra" style="color: #4AB6B6" data-producto-id="' + full.id + '"><img class="fas fa-plus" /></button>' +
-                            '<button class="btn btnModificarPrecio" style="color: #4AB6B6" data-producto-id="' + full.id + '"><img class="fas fa-money-check-alt" /></button>';
+                            '<button class="btn btnAgregarCompra" style="color: #4AB6B6" data-producto-id="' + full.id + '"><img class="fas fa-plus" /></button>' +*/
+                            
                     }
                 }
             ]
