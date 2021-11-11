@@ -1,320 +1,323 @@
-﻿@model SIGECA.Controllers.VentaController.ModelVenta
+﻿
+@model SIGECA.Controllers.VentaController.ModelVenta
 @{
+    Layout = "~/Views/Shared/_layout2.cshtml";
     ViewData["Title"] = "Gestionar Ventas";
 }
 
-<h2 class="mt-3" style="color:white">Gestion de Ventas</h2>
-<div class="row">
-    <div class="col">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" style="border-radius:10px">
-                <p style="color:black;">Existen @Model.ventas.Count() ventas registradas</p>
-            </ol>
-        </nav>
+    <h2 class="mt-3" style="color:white">Gestion de Ventas</h2>
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" style="border-radius:10px">
+                    <p style="color:black;">Existen @Model.ventas.Count() ventas registradas</p>
+                </ol>
+            </nav>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary float-right" onclick="clearDataVenta(); $('#modalRegistrarVenta').modal('show')"><i class="fas fa-plus"></i> Agregar Venta</button>
+        </div>
     </div>
-    <div class="col">
-        <button class="btn btn-primary float-right" onclick="clearDataVenta(); $('#modalRegistrarVenta').modal('show')"><i class="fas fa-plus"></i> Agregar Venta</button>
-    </div>
-</div>
 
 
 
-<table id="tableVenta" class="table datatable-venta" style="background-color:white">
-    <thead class="thead-light">
-        <tr>
-            <th scope="col">Codigo de Venta</th>
-            <th scope="col">Costo</th>
-            <th scope="col">Fecha Registro</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Acciones</th>
-        </tr>
-    </thead>
-</table>
+    <table id="tableVenta" class="table datatable-venta" style="background-color:white">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Codigo de Venta</th>
+                <th scope="col">Costo</th>
+                <th scope="col">Fecha Registro</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+    </table>
 
-<div class="modal" id="modalRegistrarVenta" tabindex="-1" aria-labelledby="registrarVentaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="registrarUsuarioLabel">Registrar Nueva Venta</h5>
-                <button type="button" class="close" data-dismiss="modal" onclick="cerrarModal(); $('#modalRegistrarVenta').modal('hide')" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row" style="padding: 5px 5%; margin-top: 30px;">
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <label class="form-label">Tipo de Venta: </label>
-                    </div>
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="presencialRadio" value="presencial" name="customRadioInline1" class="custom-control-input">
-                            <label class="custom-control-label" for="presencialRadio">Presencial</label>
+    <div class="modal" id="modalRegistrarVenta" tabindex="-1" aria-labelledby="registrarVentaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registrarUsuarioLabel">Registrar Nueva Venta</h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="cerrarModal(); $('#modalRegistrarVenta').modal('hide')" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="padding: 5px 5%; margin-top: 30px;">
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <label class="form-label">Tipo de Venta: </label>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="presencialRadio" value="presencial" name="customRadioInline1" class="custom-control-input">
+                                <label class="custom-control-label" for="presencialRadio">Presencial</label>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="onlineRadio" value="online" name="customRadioInline1" class="custom-control-input">
+                                <label class="custom-control-label" for="onlineRadio">Online</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="onlineRadio" value="online" name="customRadioInline1" class="custom-control-input">
-                            <label class="custom-control-label" for="onlineRadio">Online</label>
+                    <div id="clienteForm" class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="nombreCliente" class="form-label">Nombre del Cliente: </label>
+                            <input class="form-control" type="text" id="nombreCliente" name="nombreCliente" />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="apellidoCliente" class="form-label">Apellidos del Cliente: </label>
+                            <input class="form-control" type="text" id="apellidoCliente" name="dniCliente" />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="correoCliente" class="form-label">Correo: </label>
+                            <input class="form-control" type="text" id="correoCliente" name="dniCliente" />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="telefonoCliente" class="form-label">Telefono: </label>
+                            <input class="form-control" type="text" id="telefonoCliente" name="dniCliente" maxlength="9" />
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="direccionCliente" class="form-label" style=" margin-top: 9px;">Direccion:</label>
+                            <textarea class="form-control" id="direccionCliente"
+                                      name="direccionCliente"
+                                      rows="3"></textarea>
                         </div>
                     </div>
-                </div>
-                <div id="clienteForm" class="row" style="padding: 5px 5%">
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="nombreCliente" class="form-label">Nombre del Cliente: </label>
-                        <input class="form-control" type="text" id="nombreCliente" name="nombreCliente" />
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="apellidoCliente" class="form-label">Apellidos del Cliente: </label>
-                        <input class="form-control" type="text" id="apellidoCliente" name="dniCliente" />
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="correoCliente" class="form-label">Correo: </label>
-                        <input class="form-control" type="text" id="correoCliente" name="dniCliente" />
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="telefonoCliente" class="form-label">Telefono: </label>
-                        <input class="form-control" type="text" id="telefonoCliente" name="dniCliente" maxlength="9" />
-                    </div>
-                    <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
-                        <label for="direccionCliente" class="form-label" style=" margin-top: 9px;">Direccion:</label>
-                        <textarea class="form-control" id="direccionCliente"
-                                  name="direccionCliente"
-                                  rows="3"></textarea>
-                    </div>
-                </div>
-                <hr />
-                <div class="row" style="padding: 5px 5%">
+                    <hr />
+                    <div class="row" style="padding: 5px 5%">
 
-                    <div>
-                        <div id="qr-reader" style="width:500px"></div>
-                        <div id="qr-reader-results"></div>
-                    </div>
+                        <!--<div>
+                            <div id="qr-reader" style="width:500px"></div>
+                            <div id="qr-reader-results"></div>
+                        </div>-->
 
-                    <div class="col-6 col-sm-4">
-                        <label for="producto" class="form-label">Producto: </label>
-                        <select class="form-select form-control" onchange="cambioProductoRegistrar();" id="productoVentaRegistrar" name="producto">
-                            @foreach (var producto in Model.productos)
-                            {
-                                <option selected value="@producto.id">@producto.nombre</option>
-                            }
-                        </select>
+                        <div class="col-6 col-sm-4">
+                            <label for="producto" class="form-label">Producto: </label>
+                            <select class="form-select form-control" onchange="cambioProductoRegistrar();" id="productoVentaRegistrar" name="producto">
+                                @foreach (var producto in Model.productos)
+                                {
+                                    <option selected value="@producto.id">@producto.nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <label for="cantidadItem" class="form-label">Cantidad:</label>
+                            <input class="form-control" id="cantidadVentaRegistrar" onblur="cambioCantidadRegistrar();" name="cantidadItem">
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <label for="costoItem" class="form-label">Costo:</label>
+                            <input class="form-control" id="costoVentaRegistrar" name="costoItem" disabled>
+                        </div>
+                        <div class="col-6 col-sm-1" style="display:flex">
+                            <a class="btn btn-primary" id="agregaritemVenta" onclick="addItem();" style="align-self:flex-end"><i class="fas fa-plus"></i></a>
+                        </div>
                     </div>
-                    <div class="col-6 col-sm-2">
-                        <label for="cantidadItem" class="form-label">Cantidad:</label>
-                        <input class="form-control" id="cantidadVentaRegistrar" onblur="cambioCantidadRegistrar();" name="cantidadItem">
-                    </div>
-                    <div class="col-6 col-sm-2">
-                        <label for="costoItem" class="form-label">Costo:</label>
-                        <input class="form-control" id="costoVentaRegistrar" name="costoItem" disabled>
-                    </div>
-                    <div class="col-6 col-sm-1" style="display:flex">
-                        <a class="btn btn-primary" id="agregaritemVenta" onclick="addItem();" style="align-self:flex-end"><i class="fas fa-plus"></i></a>
+                    <hr />
+                    <table id="itemVenta" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nombre del producto</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Costo</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <br />
+                    <div style="text-align: right">
+                        <h2>Total: S/. <span id="itemRegistrarTotal">0.00</span></h2>
                     </div>
                 </div>
-                <hr />
-                <table id="itemVenta" class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Nombre del producto</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Costo</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <br />
-                <div style="text-align: right">
-                    <h2>Total: S/. <span id="itemRegistrarTotal">0.00</span></h2>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="row" style="padding: 5px 5%;width:100%">
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <button type="button" onclick="cerrarModal(); $('#modalRegistrarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-block btn-primary" id="btnRegistrarVentaModal">
-                            Registrar Venta
-                        </button>
+                <div class="modal-footer">
+                    <div class="row" style="padding: 5px 5%;width:100%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <button type="button" onclick="cerrarModal(); $('#modalRegistrarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <button type="button" class="btn btn-block btn-primary" id="btnRegistrarVentaModal">
+                                Registrar Venta
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal" id="modalModificarVenta" tabindex="-1" aria-labelledby="modificarVentaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modificarCompraLabel">Modificar Venta</h5>
-                <button type="button" class="close" data-dismiss="modal" onclick="cerrarModal(); $('#modalModificarVenta').modal('hide')" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row" style="padding: 5px 5%; margin-top: 30px;">
-                    <input type="hidden" id="idVentaModificar" name="id" />
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <label class="form-label">Tipo de Venta: </label>
-                    </div>
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="presencialRadioModificar" value="presencial" name="customRadioInline3" class="custom-control-input">
-                            <label class="custom-control-label" for="presencialRadioModificar">Presencial</label>
+    <div class="modal" id="modalModificarVenta" tabindex="-1" aria-labelledby="modificarVentaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modificarCompraLabel">Modificar Venta</h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="cerrarModal(); $('#modalModificarVenta').modal('hide')" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="padding: 5px 5%; margin-top: 30px;">
+                        <input type="hidden" id="idVentaModificar" name="id" />
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <label class="form-label">Tipo de Venta: </label>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="presencialRadioModificar" value="presencial" name="customRadioInline3" class="custom-control-input">
+                                <label class="custom-control-label" for="presencialRadioModificar">Presencial</label>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="onlineRadioModificar" value="online" name="customRadioInline3" class="custom-control-input">
+                                <label class="custom-control-label" for="onlineRadioModificar">Online</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="onlineRadioModificar" value="online" name="customRadioInline3" class="custom-control-input">
-                            <label class="custom-control-label" for="onlineRadioModificar">Online</label>
+                    <hr />
+                    <div class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-4">
+                            <label for="producto" class="form-label">Producto: </label>
+                            <select class="form-select form-control" id="productoVentaModificar" onchange="cambioProductoModificar();" name="producto" aria-label="Default select example">
+                                @foreach (var producto in Model.productos)
+                                {
+                                    <option selected value="@producto.id">@producto.nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <label for="cantidadItem" class="form-label">Cantidad:</label>
+                            <input class="form-control" id="cantidadVentaModificar" onblur="cambioCantidadModificar();" name="cantidadItem">
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <label for="costoItem" class="form-label">Costo:</label>
+                            <input class="form-control" id="costoVentaModificar" name="costoItem" disabled>
+                        </div>
+                        <div class="col-6 col-sm-1" style="display:flex">
+                            <a class="btn btn-primary" id="agregaritemVenta" onclick="addItemModificar();" style="align-self:flex-end"><i class="fas fa-plus"></i></a>
                         </div>
                     </div>
-                </div>
-                <hr />
-                <div class="row" style="padding: 5px 5%">
-                    <div class="col-6 col-sm-4">
-                        <label for="producto" class="form-label">Producto: </label>
-                        <select class="form-select form-control" id="productoVentaModificar" onchange="cambioProductoModificar();" name="producto" aria-label="Default select example">
-                            @foreach (var producto in Model.productos)
-                            {
-                                <option selected value="@producto.id">@producto.nombre</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-6 col-sm-2">
-                        <label for="cantidadItem" class="form-label">Cantidad:</label>
-                        <input class="form-control" id="cantidadVentaModificar" onblur="cambioCantidadModificar();" name="cantidadItem">
-                    </div>
-                    <div class="col-6 col-sm-2">
-                        <label for="costoItem" class="form-label">Costo:</label>
-                        <input class="form-control" id="costoVentaModificar" name="costoItem" disabled>
-                    </div>
-                    <div class="col-6 col-sm-1" style="display:flex">
-                        <a class="btn btn-primary" id="agregaritemVenta" onclick="addItemModificar();" style="align-self:flex-end"><i class="fas fa-plus"></i></a>
+                    <hr />
+                    <table id="itemVentaModificar" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nombre del producto</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Costo</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <br />
+                    <div style="text-align: right">
+                        <h2>Total: S/. <span id="itemModificarTotal">0.00</span></h2>
                     </div>
                 </div>
-                <hr />
-                <table id="itemVentaModificar" class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Nombre del producto</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Costo</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <br />
-                <div style="text-align: right">
-                    <h2>Total: S/. <span id="itemModificarTotal">0.00</span></h2>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="row" style="padding: 5px 5%;width:100%">
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <button type="button" onclick="cerrarModal(); $('#modalModificarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-block btn-primary" id="btnModificarVentaModal">
-                            Modificar Venta
-                        </button>
+                <div class="modal-footer">
+                    <div class="row" style="padding: 5px 5%;width:100%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <button type="button" onclick="cerrarModal(); $('#modalModificarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <button type="button" class="btn btn-block btn-primary" id="btnModificarVentaModal">
+                                Modificar Venta
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal" id="modalConsultarVenta" tabindex="-1" aria-labelledby="consultarVentaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modificarCompraLabel">Detalle de Venta</h5>
-                <button type="button" class="close" data-dismiss="modal" onclick="$('#modalConsultarVenta').modal('hide')" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row" style="padding: 5px 5%; margin-top: 30px;">
-                    <input type="hidden" id="idVentaConsultar" name="id" />
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <label class="form-label">Tipo de Venta: </label>
-                    </div>
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="presencialRadioConsultar" value="presencial" name="customRadioInline5" class="custom-control-input" disabled>
-                            <label class="custom-control-label" for="presencialRadioConsultar">Presencial</label>
+    <div class="modal" id="modalConsultarVenta" tabindex="-1" aria-labelledby="consultarVentaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modificarCompraLabel">Detalle de Venta</h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="$('#modalConsultarVenta').modal('hide')" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="padding: 5px 5%; margin-top: 30px;">
+                        <input type="hidden" id="idVentaConsultar" name="id" />
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <label class="form-label">Tipo de Venta: </label>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="presencialRadioConsultar" value="presencial" name="customRadioInline5" class="custom-control-input" disabled>
+                                <label class="custom-control-label" for="presencialRadioConsultar">Presencial</label>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="onlineRadioConsultar" value="online" name="customRadioInline5" class="custom-control-input" disabled>
+                                <label class="custom-control-label" for="onlineRadioConsultar">Online</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-3 col-sm-3 col-lg-3 col-xl-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="onlineRadioConsultar" value="online" name="customRadioInline5" class="custom-control-input" disabled>
-                            <label class="custom-control-label" for="onlineRadioConsultar">Online</label>
+                    <div id="clienteFormConsultar" class="row" style="padding: 5px 5%">
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="nombreClienteConsultar" class="form-label">Nombre del Cliente: </label>
+                            <input class="form-control" type="text" id="nombreClienteConsultar" name="nombreClienteConsultar" disabled />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="apellidoClienteConsultar" class="form-label">Apellidos del Cliente: </label>
+                            <input class="form-control" type="text" id="apellidoClienteConsultar" name="dniClienteConsultar" disabled />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="correoClienteConsultar" class="form-label">Correo: </label>
+                            <input class="form-control" type="text" id="correoClienteConsultar" name="dniClienteConsultar" disabled />
+                        </div>
+                        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
+                            <label for="telefonoClienteConsultar" class="form-label">Telefono: </label>
+                            <input class="form-control" type="text" id="telefonoClienteConsultar" name="dniClienteConsultar" disabled />
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
+                            <label for="direccionClienteConsultar" class="form-label" style=" margin-top: 9px;">Direccion:</label>
+                            <textarea class="form-control" id="direccionClienteConsultar"
+                                      name="direccionCliente"
+                                      rows="3"></textarea>
                         </div>
                     </div>
-                </div>
-                <div id="clienteFormConsultar" class="row" style="padding: 5px 5%">
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="nombreClienteConsultar" class="form-label">Nombre del Cliente: </label>
-                        <input class="form-control" type="text" id="nombreClienteConsultar" name="nombreClienteConsultar" disabled />
+                    <div class="row" style="padding: 5px 5%; margin-top: 30px;">
+
                     </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="apellidoClienteConsultar" class="form-label">Apellidos del Cliente: </label>
-                        <input class="form-control" type="text" id="apellidoClienteConsultar" name="dniClienteConsultar" disabled />
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="correoClienteConsultar" class="form-label">Correo: </label>
-                        <input class="form-control" type="text" id="correoClienteConsultar" name="dniClienteConsultar" disabled />
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-                        <label for="telefonoClienteConsultar" class="form-label">Telefono: </label>
-                        <input class="form-control" type="text" id="telefonoClienteConsultar" name="dniClienteConsultar" disabled />
-                    </div>
-                    <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
-                        <label for="direccionClienteConsultar" class="form-label" style=" margin-top: 9px;">Direccion:</label>
-                        <textarea class="form-control" id="direccionClienteConsultar"
-                                  name="direccionCliente"
-                                  rows="3"></textarea>
+                    <hr />
+                    <table id="itemVentaConsultar" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nombre del producto</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Costo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <br />
+                    <div style="text-align: right">
+                        <h2>Total: S/. <span id="itemConsultarTotal">0.00</span></h2>
                     </div>
                 </div>
-                <div class="row" style="padding: 5px 5%; margin-top: 30px;">
-                    
+                <div class="modal-footer">
+                    <button type="button" onclick="$('#modalConsultarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
-                <hr />
-                <table id="itemVentaConsultar" class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Nombre del producto</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Costo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <br />
-                <div style="text-align: right">
-                    <h2>Total: S/. <span id="itemConsultarTotal">0.00</span></h2>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="$('#modalConsultarVenta').modal('hide')" class="btn btn-block btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
-</div>
 
-<input type="hidden" id="URL_ObtenerVentaPorID" value="@Url.Action("ObtenerVentaID", "Venta")" />
-<input type="hidden" id="URL_VentasListarTodos" value="@Url.Action("ObtenerVentas", "Venta")" />
-<input type="hidden" id="URL_ObtenerProductoPorID" value="@Url.Action("ObtenerProductoPorId", "Producto")" />
-<input type="hidden" id="URL_VentaActualizarEstado" value="@Url.Action("CambiarEstadoVenta", "Venta")" />
-<input type="hidden" id="URL_ObtenerUsuario" value="@Url.Action("ObtenerUsuario", "Venta")" />
-<input type="hidden" id="URL_ObtenerProductoPorID" value="@Url.Action("ObtenerProductoPorId", "Producto")" />
+    <input type="hidden" id="URL_ObtenerVentaPorID" value="@Url.Action("ObtenerVentaID", "Venta")" />
+    <input type="hidden" id="URL_VentasListarTodos" value="@Url.Action("ObtenerVentas", "Venta")" />
+    <input type="hidden" id="URL_ObtenerProductoPorID" value="@Url.Action("ObtenerProductoPorId", "Producto")" />
+    <input type="hidden" id="URL_VentaActualizarEstado" value="@Url.Action("CambiarEstadoVenta", "Venta")" />
+    <input type="hidden" id="URL_ObtenerUsuario" value="@Url.Action("ObtenerUsuario", "Venta")" />
+    <input type="hidden" id="URL_ObtenerProductoPorID" value="@Url.Action("ObtenerProductoPorId", "Producto")" />
+
 
 
 @section scripts{
