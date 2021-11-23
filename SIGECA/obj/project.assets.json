@@ -6868,11 +6868,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAA_TP-2021-2\\SIGECA\\SIGECA.csproj",
+      "projectUniqueName": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA\\SIGECA.csproj",
       "projectName": "SIGECA",
-      "projectPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAA_TP-2021-2\\SIGECA\\SIGECA.csproj",
+      "projectPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA\\SIGECA.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAA_TP-2021-2\\SIGECA\\obj\\",
+      "outputPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
