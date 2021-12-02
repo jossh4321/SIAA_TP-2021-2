@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj": {}
+    "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIAA_TP-2021-2\\SIAA_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj": {
+    "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIAA_TP-2021-2\\SIAA_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIAA_TP-2021-2\\SIAA_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj",
         "projectName": "SIGECA_Shop",
-        "projectPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj",
+        "projectPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIAA_TP-2021-2\\SIAA_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA_Shop\\obj\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIAA_TP-2021-2\\SIAA_TP-2021-2\\SIGECA_Shop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",

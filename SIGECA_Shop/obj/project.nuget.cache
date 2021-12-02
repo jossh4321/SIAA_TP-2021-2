@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RRFFGwg3JtxfDgR3T3WbZF6B/Uj7FUqhpbOXKfuLEEVXbDddiDD/5eEu7pJtGwZSCXQz6f2jLV09+VfO/OnFvA==",
+  "dgSpecHash": "oWoTfwfmhsv7TJfrS9RdjGIoJOdJ1zoW0FQxePU7sKIfIVHfb7emPCg4VhbBEE/3UfqqSQkwvzRRa/itjrSfTw==",
   "success": false,
-  "projectFilePath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj",
+  "projectFilePath": "C:\\Users\\USER\\Desktop\\SIAC_TP\\SIAC_TP-2021-2\\SIAA_TP-2021-2\\SIAA_TP-2021-2\\SIGECA_Shop\\SIGECA_Shop.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\dnsclient\\1.4.0\\dnsclient.1.4.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.7\\microsoft.aspnetcore.authentication.jwtbearer.5.0.7.nupkg.sha512",
