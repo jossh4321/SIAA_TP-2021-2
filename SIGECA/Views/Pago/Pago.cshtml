@@ -3,7 +3,7 @@
 @model IEnumerable<Venta>
 @{
     ViewData["Title"] = "Gestionar Pago";
-    Layout = "_layout2";
+    ;
 }
 <h1 class="mt-4" style="color: white">Gestion de Pagos</h1>
 <div class="card mb-4">
@@ -21,19 +21,21 @@
 
     <div>
         <table>
-            <tr>
-                <td width="700px">
-                </td>
-                <td>
-                    <label>Buscar Venta:  </label>
-                </td>
-                <td>
-                    <input id="searchTerm" type="text" onkeyup="doSearch()" />
-                </td>
-                <td>
-                    <button id="btnLimpiar" class="btn btn-outline-success">Limpiar</button>
-                </td>
-            </tr>
+            <!--<tr>
+    <td width="700px">
+    </td>
+
+    <td>
+        <label>Buscar Venta:  </label>
+    </td>
+
+       <td>
+           <input id="searchTerm" type="text" onkeyup="doSearch()" />
+       </td>
+       <td>
+           <button id="btnLimpiar" class="btn btn-outline-success">Limpiar</button>
+       </td>
+       </tr>-->
         </table>
 
     </div>
@@ -123,7 +125,7 @@
             <div class="modal-footer">
                 <button id="btnPrint" type="button" class="btn btn-primary" onclick="imprim1(imp1)">Imprimir</button>
                 <button id="btnPagar" type="button" style="background-color:Green; color:white" class="btn btn-pagar">Cobrar</button>
-                <button id="btnAnular" type="button" style="background-color: red; color: white" class="btn btn-anular">Anular</button>
+                <!--<button id="btnAnular" type="button" style="background-color: red; color: white" class="btn btn-anular">Anular</button>-->
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
