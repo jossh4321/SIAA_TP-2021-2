@@ -5,7 +5,7 @@
             dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
             "processing": true,
             "serverSide": true,
-            "searching": true,
+            "searching": false,
             "sort": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -25,7 +25,7 @@
                 },
                 "sInfo": "_START_ a _END_ de _TOTAL_ registros",
                 "sLengthMenu": "Mostrar _MENU_ registros",
-                "sSearch": "Buscar:",
+                /*"sSearch": "Buscar:",*/
                 /*"searchBuilder": {
                     "add": "Añadir condición",
                     "button": {
@@ -120,6 +120,7 @@
 
 
     $('#fechaNacimientoUsuarioRegistrar').datepicker({
+        "maxDate": new Date(2003,1,1),
         "format": "yyyy-mm-dd"
     });
 
@@ -414,7 +415,9 @@ $(function () {
                     $("#tipoDocumentoUsuarioVisualizar").val(usuario.datos.tipoDocumento);
                     $("#numeroDocumentoUsuarioVisualizar").val(usuario.datos.numeroDocumento);
                     $("#tipoUsuarioUsuarioVisualizar").val(usuario.tipoUsuario);
-                    $("#fechaNacimientoUsuarioVisualizar").datepicker('update', usuario.datos.fechaNacimiento.split("T")[0]);
+
+                    var listaSpliteada = usuario.datos.fechaNacimiento.split("T");
+                    $("#fechaNacimientoUsuarioVisualizar").val(listaSpliteada[0]);
                     $("#rolVisualizarUsuario").val(usuario.rol);
                     $("#modalConsultarUsuario").modal('show');
                 }

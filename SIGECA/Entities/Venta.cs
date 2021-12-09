@@ -54,6 +54,8 @@ namespace SIGECA.Entities
         public double subTotal { get; set; }
     }
 
+
+
     public class DatosCliente
     {
         public string nombres { get; set; }

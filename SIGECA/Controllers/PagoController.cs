@@ -43,12 +43,14 @@ namespace SIGECA.Controllers
             Object result = null;
             Venta venta = await _pagoService.GetByCodigoVenta(codigoVenta);
             List<Producto> productos = await _productoService.GetAll();
+            List<Producto> detalleItems = new List<Producto>(); 
             foreach (Items item in venta.items)
             {
                 var itm = productos.Find(i => i.id == item.productoID);
+                detalleItems.Add(itm);
                 item.nombre = itm.nombre;
             }
-            result = new { result = "success", value = venta };
+            result = new { result = "success", value = venta, productDetail = detalleItems };
             return Content(JsonConvert.SerializeObject(result));
         }
 

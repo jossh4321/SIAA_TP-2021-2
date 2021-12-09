@@ -254,6 +254,7 @@ $('#tablaVentaPorCódigo').on('click', '.btnRegistrarPago', function (e) {
                 if (data.result == "success") {
                     console.log("entro data result")
                     var venta = data.value;
+                    var detalleProductos = data.productDetail;
                     console.log('codigoVenta', venta.codigoVenta)
                     console.log('codigoVenta', venta.id)
                     $("#idCodigoVenta").val(venta.id)
@@ -261,8 +262,9 @@ $('#tablaVentaPorCódigo').on('click', '.btnRegistrarPago', function (e) {
                     var date = new Date(Date.parse(venta.fechaVenta));
                     $("#txtFecha").val(date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear());
                     var productos = '';
-                    venta.items.forEach(c => {
-                        productos += c.nombre + "\n";
+                    detalleProductos.forEach(c => {
+                        var cantidadProd = venta.items.find(x => x.productoID == c.id).cantidad;
+                        productos += c.nombre + " - (" + cantidadProd+" "+c.unidadMedida+") \n";
                     });
                     $("#txaProductos").val(productos);     
                     $("#txtTotal").val(venta.total);

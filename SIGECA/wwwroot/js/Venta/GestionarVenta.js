@@ -519,7 +519,8 @@ $('#tableVenta').on('click', '.btnVisualizarVenta', function (e) {
             if (data.result == "success") {
                 var venta = data.value.venta;
                 var datos = venta.datos;
-                if (venta.tipo == "presencial") {
+                var detalleProductos = data.productDetail;
+                  if (venta.tipo == "presencial") {
                     $('#presencialRadioConsultar').prop('checked', true);
                 }
                 if (venta.tipo == "online") {
@@ -536,7 +537,7 @@ $('#tableVenta').on('click', '.btnVisualizarVenta', function (e) {
                 itemscompra.forEach(v => {
                     var row = "<tr>" +
                         "<td>" + v.nombre + "</td>" +
-                        "<td>" + v.cantidad + "</td>" +
+                        "<td>" + v.cantidad + " "+ detalleProductos.find(x => x.id == v.productoID).unidadMedida+"</td>" +
                         "<td>" + parseFloat(v.subTotal).toFixed(2) + "</td>" +
                         "</tr>";
                     $('#itemVentaConsultar > tbody').append(row);
