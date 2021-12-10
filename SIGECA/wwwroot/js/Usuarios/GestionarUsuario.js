@@ -123,7 +123,7 @@
         "maxDate": new Date(2003,1,1),
         "format": "yyyy-mm-dd"
     });
-
+    
     $('#fechaNacimientoUsuarioModificar').datepicker({
         "format": "yyyy-mm-dd"
     });
