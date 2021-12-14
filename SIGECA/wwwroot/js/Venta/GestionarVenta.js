@@ -139,7 +139,7 @@ docReady(function () {
                     if (data.result) {
                         var producto = data.value.producto;                        
                         $("#productoVentaRegistrar").val(decodedText);
-                        $("#cantidadVentaRegistrar").val(1);
+                        $("#cantidadVentaRegistrar").val(1.00);
                         var costo = parseFloat(producto.precio).toFixed(2);
                         costoProductoRegistrar = costo;
                         var costo = parseFloat(producto.precio).toFixed(2);
@@ -359,6 +359,39 @@ function validarVacioVentaRegistrar() {
     }
 }
 
+//-------------------------------------------
+function validarNombresApellidos(cadena) {
+
+    const pattern = /^\w+\s*\w+$/;
+    return pattern.test(cadena); 
+}
+function validarNumeroTelefono(cadena) {
+
+    const pattern = /^\d{9}$/;
+    return pattern.test(cadena);
+}
+function validarCorreoElectronico(cadena) {
+
+    const pattern = /\S+@\S+\.\S+/;
+    return pattern.test(cadena);
+}
+function alertFunctionShortcut(title, iconNot, htmMessage) {
+    Swal.fire({
+        title: '<strong>'+title+'</strong>',
+        icon: iconNot,
+        html:
+            htmMessage,
+        showCloseButton: true,
+        showCancelButton: false,
+        focusConfirm: false,
+        confirmButtonColor: '#d33',
+        confirmButtonText:
+            '<i class="fa fa-thumbs-down"></i> Volver',
+        confirmButtonAriaLabel: 'Volver',
+    });
+}
+//-------------------------------------------
+
 $("#btnRegistrarVentaModal").on("click", function () {
     if (validarVacioVentaRegistrar() == false) {
         return false;
@@ -378,52 +411,82 @@ $("#btnRegistrarVentaModal").on("click", function () {
     datos.direccion = $('#direccionCliente').val();
     Venta.total = costoTotal;
     Venta.datos = datos;
-    var row = document.getElementById('itemVenta').rows.length;
-    for (i = 1; i < row; i++) {
-        var item = new Object();
-        item.nombre = document.getElementById("itemVenta").rows[i].cells.item(0).innerHTML;
-        item.cantidad = Number(document.getElementById("itemVenta").rows[i].cells.item(1).innerHTML);
-        item.subTotal = parseFloat(document.getElementById("itemVenta").rows[i].cells.item(2).innerHTML);
-        itemsProductos.push(item);
-    }
 
-    Venta.items = itemsProductos;
-    Venta.estado = "pendiente";
-    $.ajax({
-        type: 'post',
-        url: 'Venta/RegistrarVenta',
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(Venta),
-        dataType: "json",
-        success: function (data, textStatus, jqXHR) {
-            if (data.result == "success") {
-                //Escondiendo el Modal
-                $("#modalRegistrarVenta").modal('hide');
-                //Limpiando los Campos de Texto
-                clearDataVenta();
-                //Recargar Tabla
-                $('.datatable-venta').dataTable().fnDraw();
-                //Mostrando el Mensaje de Exito
-                Swal.fire({
-                    title: '<strong>Listo!</strong>',
-                    icon: 'success',
-                    html:
-                        'Venta Registrado Satisfactoriamente',
-                    showCloseButton: true,
-                    showCancelButton: false,
-                    focusConfirm: false,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText:
-                        '<i class="fa fa-thumbs-up"></i> Continuar',
-                    confirmButtonAriaLabel: 'Continuar',
-                });
-            }
-            else {
+    if (validarNombresApellidos(datos.nombres) === false) {
+        alertFunctionShortcut("Error!", "error", "El nombre no puede poseer numeros ni terminar con espacios en blanco");
+    }
+    else if (validarNombresApellidos(datos.apellidos) === false) {
+        alertFunctionShortcut("Error!", "error", "El apellido no puede poseer numeros ni terminar con espacios en blanco");
+    }
+    else if (validarNumeroTelefono(datos.telefono) === false) {
+        alertFunctionShortcut("Error!", "error", "El numero de telefono debe poseer 9 caracteres numericos");
+    } else if (validarCorreoElectronico(datos.correo) === false) {
+        alertFunctionShortcut("Error!", "error", "El correo electronico incorrecto, debe cumplir el formato some@trhing.com");
+    } else {
+        var row = document.getElementById('itemVenta').rows.length;
+        for (i = 1; i < row; i++) {
+            var item = new Object();
+            item.nombre = document.getElementById("itemVenta").rows[i].cells.item(0).innerHTML;
+            item.cantidad = Number(document.getElementById("itemVenta").rows[i].cells.item(1).innerHTML);
+            item.subTotal = parseFloat(document.getElementById("itemVenta").rows[i].cells.item(2).innerHTML);
+            itemsProductos.push(item);
+        }
+
+        Venta.items = itemsProductos;
+        Venta.estado = "pendiente";
+        $.ajax({
+            type: 'post',
+            url: 'Venta/RegistrarVenta',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(Venta),
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                if (data.result == "success") {
+                    //Escondiendo el Modal
+                    $("#modalRegistrarVenta").modal('hide');
+                    //Limpiando los Campos de Texto
+                    clearDataVenta();
+                    //Recargar Tabla
+                    $('.datatable-venta').dataTable().fnDraw();
+                    //Mostrando el Mensaje de Exito
+                    Swal.fire({
+                        title: '<strong>Listo!</strong>',
+                        icon: 'success',
+                        html:
+                            'Venta Registrado Satisfactoriamente',
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        focusConfirm: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText:
+                            '<i class="fa fa-thumbs-up"></i> Continuar',
+                        confirmButtonAriaLabel: 'Continuar',
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: '<strong>Error!</strong>',
+                        icon: 'error',
+                        html:
+                            'Lo sentimos, Ocurrió un error Inesperado',
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        focusConfirm: false,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText:
+                            '<i class="fa fa-thumbs-down"></i> Volver',
+                        confirmButtonAriaLabel: 'Volver',
+                    });
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
                 Swal.fire({
                     title: '<strong>Error!</strong>',
                     icon: 'error',
                     html:
-                        'Lo sentimos, Ocurrió un error Inesperado',
+                        'Error del Servidor - Status 500',
                     showCloseButton: true,
                     showCancelButton: false,
                     focusConfirm: false,
@@ -433,25 +496,10 @@ $("#btnRegistrarVentaModal").on("click", function () {
                     confirmButtonAriaLabel: 'Volver',
                 });
             }
+        });
+    }
 
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
 
-            Swal.fire({
-                title: '<strong>Error!</strong>',
-                icon: 'error',
-                html:
-                    'Error del Servidor - Status 500',
-                showCloseButton: true,
-                showCancelButton: false,
-                focusConfirm: false,
-                confirmButtonColor: '#d33',
-                confirmButtonText:
-                    '<i class="fa fa-thumbs-down"></i> Volver',
-                confirmButtonAriaLabel: 'Volver',
-            });
-        }
-    });
 });
 
 function clearDataVentaModificar() {
