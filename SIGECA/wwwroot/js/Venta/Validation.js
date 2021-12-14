@@ -20,9 +20,9 @@ setInputFilter(document.getElementById("telefonoCliente"), function (value) {
 });
 
 setInputFilter(document.getElementById("cantidadVentaRegistrar"), function (value) {
-    return /^\d*$/.test(value);
+    return /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/.test(value);
 });
 
-setInputFilter(document.getElementById("cantidadVentaModificar"), function (value) {
-    return /^\d*$/.test(value);
-});
+/*setInputFilter(document.getElementById("cantidadVentaModificar"), function (value) {
+    return /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/.test(value);
+});*/
